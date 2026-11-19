@@ -29,8 +29,10 @@ BioEmu2 is research software, and its model card is explicit that it is released
 
 Generated structures are computational hypotheses and should be validated before they inform anything downstream.
 
-## The test run and its MD reference
-Section 8 of the notebook runs a known complex, HPr kinase with HPr ([1KKL](https://www.rcsb.org/structure/1KKL)), and measures how consistent the interface is across samples rather than only showing it. It then draws that ensemble next to molecular dynamics of the same complex: 21 frames from the [DynaBench](https://doi.org/10.1016/j.jmb.2026.169650) dataset, which holds three 100 ns replicas for each complex of Docking Benchmark 5.5. Those frames live in `md_reference/` and are **not** covered by the MIT licence of this repository; if you use them, cite Barlas AB, Laurent B, Karaca E, Prévost C, Sacquin-Mora S, *DynaBench: Dynamic data for the docking benchmark*, Journal of Molecular Biology 438 (2026) 169650, [doi:10.1016/j.jmb.2026.169650](https://doi.org/10.1016/j.jmb.2026.169650). The full trajectories are at [www-lbt.ibpc.fr/DynaBench](http://www-lbt.ibpc.fr/DynaBench).
+## The example and its MD reference
+The notebook's example is a complex, HPr kinase with HPr ([1KKL](https://www.rcsb.org/structure/1KKL)): three copies of the kinase plus one HPr, 614 residues. A single protein is what BioEmu2's own [examples](https://github.com/microsoft/bioemu2/tree/main/examples) already show, so this notebook spends its example on the case that is harder and more interesting, a protein-protein interface.
+
+Section 8 then asks whether that interface is *consistent* across the ensemble, rather than only showing it: an ensemble can have contact in every sample and still be telling you nothing, if the chains meet somewhere different each time. It also draws the ensemble next to molecular dynamics of the same complex, 21 frames from the [DynaBench](https://doi.org/10.1016/j.jmb.2026.169650) dataset of three 100 ns replicas per complex of Docking Benchmark 5.5. Those frames live in `md_reference/` and are **not** covered by the MIT licence of this repository; if you use them, cite Barlas AB, Laurent B, Karaca E, Prévost C, Sacquin-Mora S, *DynaBench: Dynamic data for the docking benchmark*, Journal of Molecular Biology 438 (2026) 169650, [doi:10.1016/j.jmb.2026.169650](https://doi.org/10.1016/j.jmb.2026.169650). The full trajectories are at [www-lbt.ibpc.fr/DynaBench](http://www-lbt.ibpc.fr/DynaBench).
 
 ## Credits and licence
 
