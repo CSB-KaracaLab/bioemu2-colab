@@ -1,0 +1,12 @@
+This repository contains a Colab notebook built around BioEmu2.
+
+Portions of BioEmu2_Colab.ipynb are adapted from the usage examples of
+https://github.com/microsoft/bioemu2:
+
+    Copyright (c) Microsoft Corporation.
+    Licensed under the MIT License.
+
+BioEmu2 itself is not included here. The notebook installs it from that
+repository at run time, pinned to commit 6d1ca74, and downloads the model
+weights from https://huggingface.co/microsoft/bioemu2, which are published
+under the MIT License.

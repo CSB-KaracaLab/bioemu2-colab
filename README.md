@@ -33,7 +33,7 @@ Generated structures are computational hypotheses and should be validated before
 
 BioEmu2 is developed by Microsoft Research and released under the MIT licence; its weights are published under the MIT licence on [Hugging Face](https://huggingface.co/microsoft/bioemu2). This repository contains neither: the notebook installs BioEmu2 from its own GitHub repository (pinned to commit `6d1ca74`, 3 November 2026) and downloads the weights at run time.
 
-Portions of the notebook are adapted from the examples in microsoft/bioemu2, which carry the following notice:
+Portions of the notebook are adapted from the examples in microsoft/bioemu2, which carry the following notice, repeated in [NOTICE](NOTICE):
 
 > Copyright (c) Microsoft Corporation. Licensed under the MIT License.
 
