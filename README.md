@@ -5,15 +5,23 @@
 
 A single notebook that runs [BioEmu2](https://github.com/microsoft/bioemu2), Microsoft Research's biomolecular emulator ([Gastegger et al., 2026](https://arxiv.org/abs/2611.27924)), on a Google Colab GPU. The code follows the usage examples in the BioEmu2 repository; this notebook turns them into a Colab form with input fields, plots and a download step, so that the model can be tried without a local GPU or a local installation.
 
-## What it does
+## What BioEmu2 is
 
-The notebook walks through the three things BioEmu2 was trained for:
+BioEmu2 ([Gastegger et al., 2026](https://arxiv.org/abs/2611.27924)) is one generative model with three modes, trained on experimental and synthetic structures and on a large body of molecular dynamics. It takes systems of proteins, nucleic acids, modified residues, ligands and ions. What the paper reports for each mode, and where this notebook runs it:
 
-1. **Structure prediction** — one sharp, most likely structure.
-2. **Equilibrium sampling** — an ensemble of independent conformations, filtered by BioEmu2's physicality checks.
-3. **Time propagation** — chains of time-lagged endpoints (1 ns to 1 µs per step), a coarse picture of how the system moves.
+| Mode | What the paper shows | Notebook |
+|---|---|---|
+| **Structure prediction**: one sharp, most likely structure | Accuracy comparable to open-weight co-folding models on FoldBench and Runs N' Poses, strongest for protein–protein interfaces | step 5 |
+| **Equilibrium sampling**: independent conformations of the solvated system | About half of the states MD finds for proteins and protein complexes, with 0.7–1.2 kcal/mol free-energy error on the states it does sample | step 6 |
+| **Time propagation**: endpoints at a chosen lag, chained into a coarse trajectory | Matches MD autocorrelations at lags of 1 ns to 1 µs, with no clear build-up of error over many steps; binding of PUMA to MCL-1 and domain closure of adenylate kinase as examples | step 7 |
 
-It also plots the Cα RMSD to the predicted structure and the radius of gyration over the ensemble, shows the structures in the browser with py3Dmol, and packs everything into a zip file at the end. Each output folder holds `topology.cif` and `samples.xtc`, which open in PyMOL, ChimeraX or VMD, or load with MDTraj; `equilibrium/physicality.json` records which samples failed the checks and why.
+The paper also describes tools this notebook does **not** use, all available in BioEmu2 itself:
+
+- **Contact conditioning**: residue pairs given as input, as a soft constraint. One inter-chain contact rescues a failed 4,020-residue complex prediction (8WY8, 71.2 Å → 5.0 Å RMSD).
+- **Steering and enhanced sampling**: bias potentials applied while sampling, for physical geometry, chosen conformations, or rare states and free energies. The notebook's physicality step is a check after sampling, not steering.
+- **Context parallelism**: one system split over several GPUs, up to about 16,000 residues. Colab gives one GPU, so the notebook stops well short of that.
+
+On top of BioEmu2's own output, the notebook adds plots of Cα RMSD and radius of gyration over the ensemble, 3D views with py3Dmol, a zip of everything, and step 8, a check of whether a protein–protein interface is *consistent* across the ensemble, set beside MD of the same complex.
 
 ## How to use it
 
@@ -23,19 +31,33 @@ The system is defined either by a **PDB ID** or by **sequences** separated by `:
 
 ## What to keep in mind
 
-BioEmu2 is research software, and its model card is explicit that it is released for research purposes rather than for commercial or real-world applications without further testing. Two consequences are worth repeating here:
+BioEmu2 is research software. Its model card says it is released for research purposes, not for commercial or real-world use without further testing. From the paper and the model card:
 
-- The frequencies with which conformations appear are **not calibrated Boltzmann probabilities**, and there is no confidence score of the pLDDT or PAE kind. The [paper](https://arxiv.org/abs/2611.27924) reports free-energy errors near 1 kcal/mol against MD for the proteins and complexes it tested, but the model card still warns against reading sampling frequencies as free energies.
-- In the time-propagation mode, each step is an **independent endpoint** at the chosen lag, not a frame of a continuous trajectory.
+- **Frequencies are not calibrated probabilities.** The paper's free-energy errors near 1 kcal/mol are for the states BioEmu2 samples, and it samples about half of those MD visits. The model card still warns against reading sampling frequencies as Boltzmann probabilities or free energies.
+- **There is no confidence score** of the pLDDT or PAE kind on the samples.
+- **Slow processes are hypotheses.** Nearly all of the dynamics training data is MD of up to 1 µs. The paper says rates and pathways of binding, dissociation, folding and other slow rearrangements need independent validation.
+- **Each propagation step is an independent endpoint** at the chosen lag, not a frame of a continuous trajectory. The documented lag range is 1 to 1000 ns. Longer lags tend towards the equilibrium ensemble.
+- **A complex can fail without any sign in the structures.** Every sample can pass the physicality checks and have the chains in contact, while the partner sits somewhere different in each one. Step 8 measures this, and the 2A9K example below shows it.
 
 Generated structures are computational hypotheses and should be validated before they inform anything downstream.
 
-## The example and its MD reference
-The notebook's example is a complex, HPr kinase with HPr ([1KKL](https://www.rcsb.org/structure/1KKL)): three copies of the kinase plus one HPr, 614 residues. A single protein is what BioEmu2's own [examples](https://github.com/microsoft/bioemu2/tree/main/examples) already show, so this notebook spends its example on the case that is harder and more interesting, a protein-protein interface.
+## The examples and their MD reference
+The notebook's first example is a complex, HPr kinase with HPr ([1KKL](https://www.rcsb.org/structure/1KKL)): three copies of the kinase plus one HPr, 614 residues. A single protein is what BioEmu2's own [examples](https://github.com/microsoft/bioemu2/tree/main/examples) already show, so this notebook spends its first example on the case that is harder and more interesting, a protein–protein interface.
 
-Section 8 then asks whether that interface is *consistent* across the ensemble, rather than only showing it: an ensemble can have contact in every sample and still be telling you nothing, if the chains meet somewhere different each time. It also draws the ensemble next to molecular dynamics of the same complex, 21 frames from the [DynaBench](https://doi.org/10.1016/j.jmb.2026.169650) dataset of three 100 ns replicas per complex of Docking Benchmark 5.5. Those frames live in `md_reference/` and are **not** covered by the MIT licence of this repository; if you use them, cite Barlas AB, Laurent B, Karaca E, Prévost C, Sacquin-Mora S, *DynaBench: Dynamic data for the docking benchmark*, Journal of Molecular Biology 438 (2026) 169650, [doi:10.1016/j.jmb.2026.169650](https://doi.org/10.1016/j.jmb.2026.169650). The full trajectories are at [www-lbt.ibpc.fr/DynaBench](http://www-lbt.ibpc.fr/DynaBench).
+Section 8 then asks whether that interface is *consistent* across the ensemble, rather than only showing it: an ensemble can have contact in every sample and still be telling you nothing, if the chains meet somewhere different each time. It also draws the ensemble next to molecular dynamics of the same complex, 21 frames per example from the [DynaBench](https://doi.org/10.1016/j.jmb.2026.169650) dataset of three 100 ns replicas per complex of Docking Benchmark 5.5. Those frames live in `md_reference/` and are **not** covered by the MIT licence of this repository; if you use them, cite Barlas AB, Laurent B, Karaca E, Prévost C, Sacquin-Mora S, *DynaBench: Dynamic data for the docking benchmark*, Journal of Molecular Biology 438 (2026) 169650, [doi:10.1016/j.jmb.2026.169650](https://doi.org/10.1016/j.jmb.2026.169650). The full trajectories are at [www-lbt.ibpc.fr/DynaBench](http://www-lbt.ibpc.fr/DynaBench).
 
-When the interface comes out scattered, BioEmu2 offers a remedy this notebook does not use: conditioning on residue contacts. The BioEmu2 paper shows a single inter-chain contact turning a failed complex prediction into the right one (Fig. 2e, [8WY8](https://www.rcsb.org/structure/8WY8)).
+The second example is one BioEmu2 does **not** resolve: RalA with the C3bot1 exoenzyme of *Clostridium botulinum* ([2A9K](https://www.rcsb.org/structure/2A9K)), 377 residues. It is a host–pathogen pair, so few paired sequences exist for the interface, and AlphaFold-Multimer misses it as well (ipTM 0.28). Measured the same way, with the same DynaBench frames for reference:
+
+| | samples or frames in contact | distinct residue pairs | highest frequency | pairs in ≥ half |
+|---|---|---|---|---|
+| 1KKL, DynaBench MD (kinase copy 3 · HPr) | 21/21 | 94 | 1.00 | 14 |
+| 1KKL, BioEmu2, 50 samples | 40/50 | 257 | 0.52 | 2 |
+| 2A9K, DynaBench MD (RalA · C3bot1) | 21/21 | 86 | 1.00 | 63 |
+| 2A9K, BioEmu2, 50 samples | 50/50 | 1134 | 0.12 | 0 |
+
+In 2A9K every BioEmu2 sample is in contact and every one passes the physicality checks, yet no residue pair is shared by more than 6 of the 50: the partner is placed somewhere different each time. Looking only at the structures, or at physicality, would not reveal it.
+
+Step 8's viewer shows the same thing in space: superposed on RalA, C3bot1 sits a median 54 Å from where the first sample put it, against 3 Å across the MD frames. If you already know one contact of such an interface, contact conditioning (see above) is the tool BioEmu2 offers for it; the notebook does not use it.
 
 ## Credits and licence
 

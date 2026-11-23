@@ -11,8 +11,8 @@ repository at run time, pinned to commit 6d1ca74, and downloads the model
 weights from https://huggingface.co/microsoft/bioemu2, which are published
 under the MIT License.
 
-md_reference/ holds 21 frames of the 1KKL trajectories of the DynaBench dataset, seven from
-each of its three 100 ns replicas with the first 20 ns of each discarded. They are included so
+md_reference/ holds 21 frames each of the 1KKL and 2A9K trajectories of the DynaBench dataset,
+seven from each of the three 100 ns replicas with the first 20 ns of each discarded. They are included so
 that the test run has something to compare against, and they are not covered by this
 repository's MIT licence. Please cite:
 
