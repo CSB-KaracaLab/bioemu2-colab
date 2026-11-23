@@ -59,6 +59,10 @@ In 2A9K every BioEmu2 sample is in contact and every one passes the physicality 
 
 Step 8's viewer shows the same thing in space: superposed on RalA, C3bot1 sits a median 54 Å from where the first sample put it, against 3 Å across the MD frames. If you already know one contact of such an interface, contact conditioning (see above) is the tool BioEmu2 offers for it; the notebook does not use it.
 
+## Benchmark data
+
+[`benchmark_data/`](benchmark_data) holds the tables of our benchmark of BioEmu2 on DynaBench: for 15 interfaces of 13 Docking Benchmark 5.5 complexes, the inter-protein contact frequencies in MD, in five AlphaFold 2.3 models and in 50 BioEmu2 samples, with per-interface summaries, per-residue surface values and the sequences used. Its [README](benchmark_data/README.md) gives the definitions and the columns. The MD-derived values come from DynaBench; please cite it if you use them.
+
 ## Credits and licence
 
 BioEmu2 is developed by Microsoft Research and released under the MIT licence; its weights are published under the MIT licence on [Hugging Face](https://huggingface.co/microsoft/bioemu2). This repository contains neither: the notebook installs BioEmu2 from its own GitHub repository (pinned to commit `6d1ca74`, 3 November 2026) and downloads the weights at run time.

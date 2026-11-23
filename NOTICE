@@ -21,3 +21,7 @@ repository's MIT licence. Please cite:
 
 The full trajectories are distributed at http://www-lbt.ibpc.fr/DynaBench on the MDposit
 platform (INRIA node) of the Molecular Dynamics Data Bank.
+
+benchmark_data/ holds contact frequencies and summary tables derived from the DynaBench trajectories,
+from AlphaFold2-Multimer models made with ColabFold, and from BioEmu2 samples. If you use the
+MD-derived values, please cite the DynaBench paper above.
