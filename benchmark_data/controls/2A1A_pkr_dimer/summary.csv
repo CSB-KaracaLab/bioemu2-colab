@@ -1,0 +1,5 @@
+run,n_md_persistent,n_bioemu2_predicted,md_persistent_recovered,md_persistent_at_freq_0.2,md_persistent_seen_in_any_sample,max_pair_frequency,distinct_pairs_touched,rho_bioemu2_md,rho_alphafold_bioemu2,footprint_md,footprint_bioemu2,bioemu2_footprint_in_md,bioemu2_footprint_in_20pct_of_samples,bioemu2_footprint_concentration,fnat_median,fnat_max,samples_fnat_ge_0.3
+first run (eIF2alpha + one PKR),33,0,0,0,14,0.12,1744,-0.5968,-0.29,66,328,0.1951,0,0,0,0.2162,0
+"control (eIF2alpha + two PKR), either copy",33,0,0,0,28,0.26,1511,-0.3546,0.1601,66,289,0.2215,5,0.0173,0,0.6486,2
+"control, PKR copy 1 only",33,0,0,0,25,0.14,922,-0.5336,-0.2469,66,245,0.2571,0,0,0,0.5946,1
+"control, PKR copy 2 only",33,0,0,0,25,0.12,806,-0.4749,-0.159,66,249,0.249,0,0,0,0.6486,1

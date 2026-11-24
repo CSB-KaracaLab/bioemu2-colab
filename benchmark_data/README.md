@@ -39,6 +39,27 @@ are archived separately; the link will be added here. The MD trajectories are no
 | `alphafold_models.csv` | ipTM of each of the five ranked AlphaFold models per complex. |
 | `bioemu2_samples.csv` | Per BioEmu2 sample: physicality check, fraction of input-structure inter-protein contacts kept (`fnat`), and Cα RMSD to the MD input structure. Not computed for 3K75. |
 | `sequences.fasta` | The construct sequences given to AlphaFold and BioEmu2 (those of the MD systems). |
+| `controls/2A1A_pkr_dimer/` | A control run of 2A1A with both PKR kinase domains (see below). |
+
+## Control: 2A1A with the PKR kinase dimer
+
+In the benchmark, 2A1A was sampled as in the MD system: one eIF2α and one PKR kinase domain. BioEmu2 places
+eIF2α differently in almost every sample. Because PKR is a back-to-back dimer in the biological assembly, we
+sampled 2A1A once more with one eIF2α and two PKR kinase domains (713 residues, 50 equilibrium samples, same
+commit and seed). The kinase dimer of the crystal forms in all 50 samples (each keeps at least 14 of its 19
+contacts), but eIF2α is still scattered: none of the 33 MD-persistent contacts reaches half of the samples, the
+most frequent contact is in 26% of them (12% in the first run), and two samples keep more than 30% of the
+input contacts (none in the first run). The benchmark tables above use the first run. A contact of eIF2α
+counts in the control if it is made with either PKR copy.
+
+| File in `controls/2A1A_pkr_dimer/` | Content |
+|---|---|
+| `summary.csv` | The first run and the control side by side, with the columns of `interfaces.csv` that concern BioEmu2, plus the control read against each PKR copy alone. |
+| `contact_frequencies.csv` | eIF2α–PKR residue pairs: MD, AlphaFold, the first BioEmu2 run, and the control (either copy, and each copy). |
+| `residue_surfaces.csv` | Per residue: highest contact frequency with any partner residue in MD, AlphaFold, the first run and the control. |
+| `pkr_dimer_contacts.csv` | PKR–PKR residue pairs in the control, with those in contact in the crystal dimer (biological assembly 1 of 2A1A) marked. |
+| `samples.csv` | Per control sample: contacts of eIF2α with each PKR copy, fraction of input contacts kept (`fnat`), and fraction of the crystal kinase-dimer contacts present (`pkr_dimer_fnat`). |
+| `sequences.fasta` | The three chains given to BioEmu2. |
 
 ## Notes
 

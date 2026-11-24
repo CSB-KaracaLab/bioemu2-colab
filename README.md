@@ -61,7 +61,7 @@ Step 8's viewer shows the same thing in space: superposed on RalA, C3bot1 sits a
 
 ## Benchmark data
 
-[`benchmark_data/`](benchmark_data) holds the tables of our benchmark of BioEmu2 on DynaBench: for 15 interfaces of 13 Docking Benchmark 5.5 complexes, the inter-protein contact frequencies in MD, in five AlphaFold 2.3 models and in 50 BioEmu2 samples, with per-interface summaries, per-residue surface values and the sequences used. Its [README](benchmark_data/README.md) gives the definitions and the columns. The MD-derived values come from DynaBench; please cite it if you use them.
+[`benchmark_data/`](benchmark_data) holds the tables of our benchmark of BioEmu2 on DynaBench: for 15 interfaces of 13 Docking Benchmark 5.5 complexes, the inter-protein contact frequencies in MD, in five AlphaFold 2.3 models and in 50 BioEmu2 samples, with per-interface summaries, per-residue surface values and the sequences used. It also holds a control run of 2A1A with both PKR kinase domains, in which BioEmu2 forms the kinase dimer but still does not settle on one placement of eIF2α. Its [README](benchmark_data/README.md) gives the definitions and the columns. The MD-derived values come from DynaBench; please cite it if you use them.
 
 ## Credits and licence
 
